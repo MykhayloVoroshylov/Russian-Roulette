@@ -73,8 +73,7 @@ def desert():
         dishonorable = True  # Mark as dishonorable after 3 desertions
         print("You are now dishonorable for desertion. Redemption will be required.")
     else:
-        print(f"You have deserted {deserts} time(s). You better stop it before it's too late.")
-    score = 0  # Reset score when the player deserts
+        game_over()
 
 
 def player_turn(deadly_number, count):
@@ -88,8 +87,7 @@ def player_turn(deadly_number, count):
     count += 1
     if count == deadly_number:
         print("BANG! You are eliminated.")
-        print(f"Your final score: {score}")  # Show score at the end if the player loses
-        score = 0  # Reset score when the player dies
+        game_over()
         return "player", count, False
     else:
         print("CLICK! Computer's turn.")  # <-- This can be the only place the "Computer's turn" message is printed.
@@ -132,6 +130,7 @@ def seek_forgiveness(dishonorable, score):
 
                     if not game_on:
                         print("You failed to meet the forgiveness criteria. Try again later.")
+                        game_over()
                         return dishonorable
                     
                     honor_turns += 1  # Increment after player's turn
@@ -142,10 +141,11 @@ def seek_forgiveness(dishonorable, score):
 
                         if not game_on:
                             print("You failed to meet the forgiveness criteria. Try again later.")
+                            game_over()
                             return dishonorable
 
                 print("Your bravery has redeemed you. You are forgiven!")
-                return False
+                dishonorable = False
 
             elif choice == "2":
                 print("You must face the Forgiveness Challenge.")
@@ -162,15 +162,17 @@ def seek_forgiveness(dishonorable, score):
 
                         if count == deadly_number:
                             print("BANG! You lost during the Forgiveness Challenge.")
+                            game_over()
                             return dishonorable
                         else:
                             print(f"CLICK! You survived shot {i + 1}")
 
                     # After the loop ends, the player has survived both shots
                     print("Incredible bravery! You are forgiven!")
-                    return False
+                    dishonorable = False
                 else:
                     print("Execution it is... Goodbye, dishonorable one!")
+                    game_over()
                     return dishonorable
             
             else:
@@ -182,13 +184,12 @@ def seek_forgiveness(dishonorable, score):
                 time.sleep(1)
                 print("FIRE!!!!")
                 print("You were executed for the unsportsmanlike behaviour of", reason)
-                print(f"Your final score is: {score}")
-                score = 0  # Reset score after execution
-                return False
+                game_over()
+                dishonorable = False
 
 
     print("You are not marked as Dishonorable. Play honorably!")
-    return dishonorable
+    dishonorable = False
 
 
 def dishonorable_game_loop(deadly_number, count):
@@ -202,8 +203,7 @@ def dishonorable_game_loop(deadly_number, count):
         count += 1
         if count == deadly_number:
             print("BANG! You are eliminated. Perhaps it would have been better to not be such a weak coward.")
-            print(f"Your final score: {score}")
-            score = 0  # Reset score after death
+            game_over()
             return "player", count, False  # End game if the player is eliminated
         else:
             print("CLICK! You survived this shot. Wonder how you did it.")
@@ -217,11 +217,12 @@ def dishonorable_game_loop(deadly_number, count):
                     print("Wise choice")
                     seek_forgiveness()
                 elif choice == "continue":
-                    print("You continue dishonorably... Be careful!")
+                    print("You continue dishonorably... Very well!")
                     bullets_in_chamber = 2  # Refill bullets
                 else:
                     print("Invalid choice. No one survives when they hesitate.")
                     return "player", count, False
+                    game_over()
 
 
 
@@ -272,12 +273,15 @@ def game():
                         dishonorable_round(deadly_number, count)    
                         break  # Exit current game loop
 
-            print(f"Game over. Your final score is: {score}")
         elif answer == "no":
             print("Thanks for playing! Goodbye!")
             break
         else:
             print("Invalid input. Please type 'Yes' or 'No'.")
+def game_over():
+    global score
+    print(f"Game over. Your final score is: {score}")
+    score = 0
 
 
 print("Let's play Russian roulette!")
