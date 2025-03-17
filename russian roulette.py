@@ -1,6 +1,5 @@
 from random import randint
 import time
-#©MykhayloVoroshylov
 
 # Global variables
 score = 0
@@ -312,3 +311,5 @@ def game():
 print("Let's play Russian roulette!")
 print("There are 6 slots for a bullet, 1 is loaded. Try not to be shot by the bullet. Good Luck!")
 game()
+
+#©MykhayloVoroshylov
