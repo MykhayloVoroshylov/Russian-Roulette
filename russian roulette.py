@@ -1,5 +1,6 @@
 from random import randint
 import time
+#©MykhayloVoroshylov
 
 # Global variables
 score = 0
